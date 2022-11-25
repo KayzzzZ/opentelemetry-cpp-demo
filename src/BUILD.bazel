@@ -1,0 +1,36 @@
+
+
+#load("@rules_foreign_cc//foreign_cc:defs.bzl", "cmake")
+
+#cmake(
+#    name = "opentelemetry_cpp",
+#     build_args = [
+#        "--",  # <- Pass remaining options to the native tool.
+#        "-j`nproc`",
+#        "-l`nproc`",
+#    ],
+#    cache_entries = {
+#        "CMAKE_POSITION_INDEPENDENT_CODE": "ON",
+#        "BUILD_SHARED_LIBS": "OFF",
+#        "WITH_OTLP": "ON",
+#        "WITH_PROMETHEUS": "ON",
+#    },
+#    lib_source = "@opentelemetry_cpp_sdk//:all_srcs",
+#    out_static_libs = ["libopentelemetry.a"],
+#)
+
+
+cc_binary(
+   name = "demo",
+   srcs = glob(["*.cc"]),
+   copts = ["-Wno-deprecated-copy", "-Wno-deprecated-declarations", "-Wno-error=deprecated-declarations"],
+   deps = [
+#       "@io_opentelemetry_cpp//",
+#       "@opentelemetry_cpp//",
+      "@io_opentelemetry_cpp//api",
+      "@io_opentelemetry_cpp//exporters/ostream:ostream_span_exporter",
+      "@io_opentelemetry_cpp//sdk/src/trace",
+      "@io_opentelemetry_cpp//sdk:headers",
+#      "@io_opentelemetry_cpp//exporters/otlp:otlp_grpc_exporter"
+   ],
+)
