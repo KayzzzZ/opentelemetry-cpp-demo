@@ -10,6 +10,12 @@
 #include "nacos/config/ConfigService.h"
 #include "nacos/listen/Listener.h"
 #include "iostream"
+#include "unordered_map"
+#include "variant"
+
+#include "gflags/gflags_declare.h"
+
+DECLARE_string(config_server_addr);
 
 using namespace nacos;
 using namespace std;
@@ -33,8 +39,8 @@ private:
 
 class NacosConfigManager : public ConfigManager {
 public:
-    NacosConfigManager(std::string_view& addr){
-        props[PropertyKeyConst::SERVER_ADDR] = addr;
+    NacosConfigManager(){
+        props[PropertyKeyConst::SERVER_ADDR] = FLAGS_config_server_addr;
     }
 
     void init() override {
@@ -86,6 +92,9 @@ private:
     ConfigService* configService;
     ResourceGuard<ConfigService>* guard;
     MyListener* listener;
+
+
+
 };
 
 

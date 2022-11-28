@@ -6,9 +6,13 @@
 #include "opentelemetry/exporters/ostream/span_exporter_factory.h"
 #include "opentelemetry/trace/provider.h"
 #include "opentelemetry/sdk/trace/tracer_provider_factory.h"
+
+#include "gflags/gflags.h"
 //#include "opentelemetry/exporters/otlp/otlp_grpc_exporter_factory.h"
 //#include "opentelemetry/exporters/otlp/"
 //#include "exporters/otlp/otlp_grpc_exporter/"
+
+DEFINE_string(config_server_addr, "0.0.0.0:8848", "ConfigServer address");
 
 int init_opentelemetry() {
     // initialize grpc exporter
@@ -41,7 +45,16 @@ opentelemetry::nostd::shared_ptr<opentelemetry::trace::Tracer> get_tracer() {
     return opentelemetry::trace::Provider::GetTracerProvider()->GetTracer("qianlu", "v1.0.0");
 }
 
-int main() {
+void initFlags(int argc, char *argv[]) {
+    gflags::SetUsageMessage("some usage message");
+    gflags::SetVersionString("1.0.0");
+    gflags::ParseCommandLineFlags(&argc, &argv, true);
+    gflags::ShutDownCommandLineFlags();
+}
+
+int main(int argc, char *argv[]) {
+    initFlags(argc, argv);
+
     init_opentelemetry();
 
     for (int i = 0; i < 1000; ++i) {

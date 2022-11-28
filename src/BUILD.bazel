@@ -39,6 +39,7 @@ cc_binary(
    copts = ["-Wno-deprecated-copy", "-Wno-deprecated-declarations", "-Wno-error=deprecated-declarations"],
    deps = [
        "nacos_cpp",
+       "//external:gflags",
 #       "@io_opentelemetry_cpp//",
 #       "@opentelemetry_cpp//",
       "@io_opentelemetry_cpp//api",
