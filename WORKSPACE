@@ -26,30 +26,42 @@ load("@com_github_grpc_grpc//bazel:grpc_extra_deps.bzl", "grpc_extra_deps")
 grpc_extra_deps()
 
 
-### foreign_cc & cmake etc
-#load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-#
-## Rule repository, note that it's recommended to use a pinned commit to a released version of the rules
-#http_archive(
-#   name = "rules_foreign_cc",
-#   sha256 = "5303e3363fe22cbd265c91fce228f84cf698ab0f98358ccf1d95fba227b308f6",
-#   strip_prefix = "rules_foreign_cc-0.9.0",
-#   url = "https://github.com/bazelbuild/rules_foreign_cc/archive/0.9.0.zip",
-#)
+## foreign_cc & cmake etc
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-#load("@rules_foreign_cc//foreign_cc:repositories.bzl", "rules_foreign_cc_dependencies")
-#
-## This sets up some common toolchains for building targets. For more details, please see
-## https://github.com/bazelbuild/rules_foreign_cc/tree/main/docs#rules_foreign_cc_dependencies
-#rules_foreign_cc_dependencies()
-#
-#_ALL_CONTENT = """\
-#filegroup(
-#    name = "all_srcs",
-#    srcs = glob(["**"]),
-#    visibility = ["//visibility:public"],
-#)
-#"""
+# Rule repository, note that it's recommended to use a pinned commit to a released version of the rules
+http_archive(
+   name = "rules_foreign_cc",
+   sha256 = "5303e3363fe22cbd265c91fce228f84cf698ab0f98358ccf1d95fba227b308f6",
+   strip_prefix = "rules_foreign_cc-0.9.0",
+   url = "https://github.com/bazelbuild/rules_foreign_cc/archive/0.9.0.zip",
+)
+
+load("@rules_foreign_cc//foreign_cc:repositories.bzl", "rules_foreign_cc_dependencies")
+
+# This sets up some common toolchains for building targets. For more details, please see
+# https://github.com/bazelbuild/rules_foreign_cc/tree/main/docs#rules_foreign_cc_dependencies
+rules_foreign_cc_dependencies()
+
+_ALL_CONTENT = """\
+filegroup(
+    name = "all_srcs",
+    srcs = glob(["**"]),
+    visibility = ["//visibility:public"],
+)
+"""
+
+## nacos
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "new_git_repository")
+new_git_repository(
+    remote = "https://github.com/nacos-group/nacos-sdk-cpp.git",
+    commit = "60dc0fb86c5c93ff9c62a637175226f9f2f3860f",
+    init_submodules = True,
+    recursive_init_submodules = True,
+    name = "nacos_sdk_cpp",
+    build_file_content = _ALL_CONTENT,
+)
+
 #
 #load("@bazel_tools//tools/build_defs/repo:git.bzl", "new_git_repository")
 #

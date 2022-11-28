@@ -1,7 +1,20 @@
 
 
-#load("@rules_foreign_cc//foreign_cc:defs.bzl", "cmake")
-
+load("@rules_foreign_cc//foreign_cc:defs.bzl", "cmake")
+cmake(
+    name = "nacos_cpp",
+     build_args = [
+        "--",  # <- Pass remaining options to the native tool.
+        "-j`nproc`",
+        "-l`nproc`",
+    ],
+    lib_source = "@nacos_sdk_cpp//:all_srcs",
+    linkopts = ["-lz","-pthread","-lcurl"],
+    install = False,
+    out_static_libs = ["libnacos-cli-static.a"],
+    postfix_script = "make install && mv libnacos-cli-static.a $INSTALLDIR/lib/",
+#    out_lib_dir = "$BUILD_TMPDIR",
+)
 #cmake(
 #    name = "opentelemetry_cpp",
 #     build_args = [
@@ -25,6 +38,7 @@ cc_binary(
    srcs = glob(["*.cc"]),
    copts = ["-Wno-deprecated-copy", "-Wno-deprecated-declarations", "-Wno-error=deprecated-declarations"],
    deps = [
+       "nacos_cpp",
 #       "@io_opentelemetry_cpp//",
 #       "@opentelemetry_cpp//",
       "@io_opentelemetry_cpp//api",
