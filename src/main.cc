@@ -61,6 +61,10 @@ int main() {
                     false);
             startSpanOptions.parent = spanContext;
             auto span = get_tracer()->StartSpan("spanName-1-child", startSpanOptions);
+            // set attributes
+            span->SetAttribute(opentelemetry::nostd::string_view("attributes_key_1"),
+                               opentelemetry::common::AttributeValue(opentelemetry::nostd::string_view("attributes_value_1_string")));
+            span->End();
 
         } else {
             // case 2: no traceId & spanId
@@ -74,7 +78,10 @@ int main() {
             // set parent span (inherit parent span's traceId & spanId)
             startSpanOptions2.parent = spanContext;
             auto childSpan = get_tracer()->StartSpan("spanName-case2-child", startSpanOptions2);
-
+            // set attributes
+            childSpan->SetAttribute(opentelemetry::nostd::string_view("attributes_key_1"),
+                               opentelemetry::common::AttributeValue(168));
+            childSpan->End();
         }
     }
 
